@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "UserPass" ADD COLUMN     "points" INTEGER NOT NULL DEFAULT 0;

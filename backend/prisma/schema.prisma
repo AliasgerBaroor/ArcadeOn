@@ -1,0 +1,268 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPERADMIN
+  ADMIN
+  USER_FREE
+  USER_PREMIUM
+}
+
+enum PointsTransactionAction {
+  EARN // Generic earning (from game event, login, etc.)
+  REDEEM // Redeeming points for rewards
+  ADJUST // Admin/manual adjustment
+  PURCHASE // Points gained by purchase/top-up
+  BONUS // Admin/seasonal/special bonus
+  EVENT // Limited time/game event
+  ACHIEVEMENT // Milestone or achievement unlocked
+  LEVEL_UP // Leveled up in-game
+  MATCH_WIN // Win in a multiplayer game
+  MATCH_LOSS // Loss, if you give participation points
+  MATCH_DRAW // Draw, if points awarded
+  REFER // Points earned via referral
+  DAILY_LOGIN // Daily login reward
+  QUEST_COMPLETE // Completed quest/missions
+  PENALTY // Penalty/deduction (cheating, rules breach)
+  REFUND // Refunded points after failed redemption
+  CONSUME_ITEM // Used in-game item for points
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  email      String    @unique
+  profilePic String
+  password   String
+  address    String?
+  contact    String?
+  role       UserRole  @default(USER_FREE)
+  age        Int?
+  gender     String?
+  coins      Int       @default(0)
+  points     Int       @default(0)
+  level      Int       @default(1)
+  isActive   Boolean   @default(true)
+  lastLogin  DateTime?
+  settings   Json?
+  tierId     String?
+  createdBy  String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Relations
+  creator            User?               @relation("UserCreatedBy", fields: [createdBy], references: [id])
+  createdUsers       User[]              @relation("UserCreatedBy")
+  devices            Device[]
+  plays              UserGame[]
+  achievements       UserAchievement[]
+  transactions       Transaction[]
+  friends            Friend[]            @relation("FriendsOwner")
+  connections        Friend[]            @relation("FriendsTarget")
+  notifications      Notification[]
+  leaderboards       Leaderboard[]
+  pointsTransactions PointsTransaction[]
+  redemptions        Redemption[]
+  userPasses         UserPass[]
+  tier               Tier?               @relation(fields: [tierId], references: [id])
+}
+
+model Device {
+  id        String   @id @default(uuid())
+  userId    String
+  deviceId  String
+  type      String
+  os        String
+  pushToken String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  type        String
+  rules       String?
+  createdAt   DateTime @default(now())
+
+  plays        UserGame[]
+  leaderboards Leaderboard[]
+}
+
+model UserGame {
+  id          String   @id @default(uuid())
+  userId      String
+  gameId      String
+  score       Int
+  coinsEarned Int      @default(0)
+  startTime   DateTime
+  endTime     DateTime
+  result      String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  game Game @relation(fields: [gameId], references: [id])
+}
+
+model Achievement {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  icon        String?
+  criteria    String // Define rules to unlock
+  createdAt   DateTime @default(now())
+
+  achievedBy UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(uuid())
+  userId        String
+  achievementId String
+  achievedAt    DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  achievement Achievement @relation(fields: [achievementId], references: [id])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  amount    Float
+  type      String // purchase, reward, withdrawal, etc.
+  currency  String
+  status    String
+  details   String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Leaderboard {
+  id     String   @id @default(uuid())
+  gameId String
+  date   DateTime
+  userId String
+  score  Int
+
+  game Game @relation(fields: [gameId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Friend {
+  id        String   @id @default(uuid())
+  ownerId   String
+  targetId  String
+  status    String // pending, accepted, blocked, etc.
+  createdAt DateTime @default(now())
+
+  owner  User @relation("FriendsOwner", fields: [ownerId], references: [id])
+  target User @relation("FriendsTarget", fields: [targetId], references: [id])
+}
+
+model Notification {
+  id      String   @id @default(uuid())
+  userId  String
+  title   String
+  message String
+  isRead  Boolean  @default(false)
+  sentAt  DateTime @default(now())
+  type    String?
+  data    Json?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PointsTransaction {
+  id        String                  @id @default(uuid())
+  userId    String
+  points    Int
+  action    PointsTransactionAction
+  reason    String // "match_win", "daily_login", "achievement"
+  metadata  Json?
+  createdAt DateTime                @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Redemption {
+  id          String   @id @default(uuid())
+  userId      String
+  rewardId    String
+  pointsSpent Int
+  status      String // "pending", "completed", "failed"
+  redeemedAt  DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  reward Reward @relation(fields: [rewardId], references: [id])
+}
+
+model Tier {
+  id        String   @id @default(uuid())
+  name      String
+  minPoints Int
+  benefits  Json
+  createdAt DateTime @default(now())
+
+  users User[]
+}
+
+model Reward {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  category    String
+  icon        String?
+  pointCost   Int
+  stock       Int? // null for unlimited
+  isActive    Boolean  @default(true)
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  redemptions Redemption[]
+}
+
+model Pass {
+  id        String   @id @default(uuid())
+  name      String
+  type      String // "free" or "paid"
+  season    String
+  startDate DateTime
+  endDate   DateTime
+  price     Float?
+  isActive  Boolean  @default(true)
+  rewards   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userPasses UserPass[]
+}
+
+model UserPass {
+  id           String    @id @default(uuid())
+  userId       String
+  passId       String
+  purchased    Boolean   @default(false)
+  purchaseDate DateTime?
+  progress     Int       @default(0)
+  points       Int       @default(0)
+  status       String    @default("active") // "active", "expired", etc.
+
+  user User @relation(fields: [userId], references: [id])
+  pass Pass @relation(fields: [passId], references: [id])
+}

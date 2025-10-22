@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint . --ext .ts,.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:migrate:deploy": "npx prisma migrate deploy",
+    "prisma:studio": "npx prisma studio",
+    "prisma:aliases": "tsx src/scripts/gen-delegates.ts",
+    "prisma:all": "npx prisma generate && tsx src/scripts/gen-delegates.ts",
+    "docker:run": "docker-compose up -d",
+    "docker:kill": "docker-compose down",
+    "prisma:seed": "tsx src/scripts/seed.ts",
+    "prisma:seed:user": "tsx src/scripts/seed.ts user"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.911.0",
+    "@aws-sdk/lib-storage": "^3.911.0",
+    "@aws-sdk/s3-presigned-post": "^3.911.0",
+    "@aws-sdk/s3-request-presigner": "^3.911.0",
+    "@hono/node-server": "^1.19.5",
+    "@prisma/client": "^6.17.1",
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "hono": "^4.10.0",
+    "ioredis": "^5.8.1",
+    "jsonwebtoken": "^9.0.2",
+    "kafkajs": "^2.2.4",
+    "prisma": "^6.17.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
+}

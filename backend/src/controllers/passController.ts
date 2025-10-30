@@ -6,7 +6,7 @@ import { addMonths } from '../utils/dateUtils.js';
 
 export const createPass = async (c: Context) => {
     const { body } = c.get("validated") as { body: PassBodyTypes };
-    
+
     const startDate = new Date();
     const endDate = addMonths(startDate, 2);
 
@@ -31,8 +31,11 @@ export const createPass = async (c: Context) => {
 };
 
 export const findAllPasss = async (c: Context) => {
+    
     try {
         const passes = await passDB.findMany();
+        console.log("passes", passes);
+        
         return c.json({ passes }, 200);
     } catch (error) {
         return c.json({ error: "Failed to fetch passes", details: (error as Error).message }, 500);

@@ -1,0 +1,1 @@
+export type MyProfileDropdown = { icon: any, label: "Profile" } | { icon: any, label: "Settings" } | { icon: any, label: "sep-Logout" };

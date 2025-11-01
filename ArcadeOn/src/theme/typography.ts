@@ -1,0 +1,130 @@
+import { moderateScale } from "../utils/scaling";
+
+export const typography = {
+  h1: {
+    fontSize: moderateScale(32),
+    fontWeight: "700" as const,
+    lineHeight: moderateScale(40),
+    fontFamily: "Geist-Bold",       
+  },
+  h2: {
+    fontSize: moderateScale(28),
+    fontWeight: "700" as const,
+    lineHeight: moderateScale(36),
+    fontFamily: "Geist-Bold",
+  },
+  h3: {
+    fontSize: moderateScale(24),
+    fontWeight: "600" as const,
+    lineHeight: moderateScale(32),
+    fontFamily: "Geist-SemiBold",   
+  },
+  h4: {
+    fontSize: moderateScale(20),
+    fontWeight: "600" as const,
+    lineHeight: moderateScale(28),
+    fontFamily: "Geist-Medium",      
+  },
+  h5: {
+    fontSize: moderateScale(18),
+    fontWeight: "600" as const,
+    lineHeight: moderateScale(24),
+    fontFamily: "Geist-Medium",
+  },
+  h6: {
+    fontSize: moderateScale(16),
+    fontWeight: "500" as const,
+    lineHeight: moderateScale(22),
+    fontFamily: "Geist-Regular",   
+  },
+  b1: {
+    fontSize: moderateScale(16),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(24),
+    fontFamily: "Geist-Regular",    
+  },
+  b2: {
+    fontSize: moderateScale(15),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(22),
+    fontFamily: "Geist-Regular",
+  },
+  b3: {
+    fontSize: moderateScale(14),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(20),
+    fontFamily: "Geist-Regular",
+  },
+  b4: {
+    fontSize: moderateScale(13),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(18),
+    fontFamily: "Geist-Light",    
+  },
+  b5: {
+    fontSize: moderateScale(12),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(16),
+    fontFamily: "Geist-Light",
+  },
+  b6: {
+    fontSize: moderateScale(11),
+    fontWeight: "400" as const,
+    lineHeight: moderateScale(14),
+    fontFamily: "Geist-Light",
+  },
+  caption: {
+    fontSize: moderateScale(12),
+    fontWeight: "300" as const,
+    lineHeight: moderateScale(16),
+    fontFamily: "Geist-Thin",     
+  },
+  landing: {
+    fontSize: moderateScale(56),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(56),
+    fontFamily: "Geist-Black",       
+  },
+  landing_sub: {
+    fontSize: moderateScale(56),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(56),
+    fontFamily: "Geist-Black",       
+  },
+  landing2: {
+    fontSize: moderateScale(60),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(56),
+    fontFamily: "Geist-Black",       
+  },
+  landing2_sub: {
+    fontSize: moderateScale(42),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(42),
+    fontFamily: "Geist-Black",       
+  },
+  landing3: {
+    fontSize: moderateScale(68),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(68),
+    fontFamily: "Geist-Black",       
+  },
+  landing3_sub: {
+    fontSize: moderateScale(56),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(48),
+    fontFamily: "Geist-Black",       
+  },
+  landing4: {
+    fontSize: moderateScale(72),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(72),
+    fontFamily: "Geist-Black",       
+  },
+  landing4_sub: {
+    fontSize: moderateScale(32),
+    fontWeight: "condensedBold" as const,
+    lineHeight: moderateScale(32),
+    fontFamily: "Geist-Black",       
+  },
+};

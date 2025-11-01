@@ -1,4 +1,5 @@
 export const FILTERS_LIST = [
+<<<<<<< HEAD
     {
         value: "Trending",
         options: []
@@ -26,3 +27,22 @@ export const FILTERS_LIST = [
         ]
     },
 ]
+=======
+  {
+    value: "Trending",
+    options: [],
+  },
+  {
+    value: "New",
+    options: [],
+  },
+  {
+    value: "Popularity",
+    options: ["Low", "Medium", "High", "None"],
+  },
+  {
+    value: "Difficulty",
+    options: ["Low", "Medium", "High", "None"],
+  },
+];
+>>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd

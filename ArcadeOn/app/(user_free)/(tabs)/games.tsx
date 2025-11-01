@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { FilterGroup } from '@/src/components/molecules/pages/FiltersGroup';
 import { FILTERS_LIST } from '@/src/constants/filters';
 import { FiltersType } from '@/src/types/filters';
@@ -8,6 +9,18 @@ import FeatureGames from '@/src/components/molecules/pages/FeatureGames';
 
 const Games = () => {
 
+=======
+import { FilterGroup } from "@/src/components/molecules/pages/FiltersGroup";
+import { FILTERS_LIST } from "@/src/constants/filters";
+import { FiltersType } from "@/src/types/filters";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import FeaturedCarousel from "@/src/components/atoms/FeaturedCarousel";
+import FeatureGames from "@/src/components/molecules/pages/FeatureGames";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const Games = () => {
+>>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd
   const games = [
     {
       id: "g1",
@@ -41,14 +54,22 @@ const Games = () => {
   ];
 
   const [filters, setFilters] = useState<FiltersType>(
+<<<<<<< HEAD
     FILTERS_LIST.map(f => ({
       value: f.value,
       options: f.options,
       selected: false
+=======
+    FILTERS_LIST.map((f) => ({
+      value: f.value,
+      options: f.options,
+      selected: false,
+>>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd
     }))
   );
 
   return (
+<<<<<<< HEAD
     <View style={{ flex: 1 }}>
       <View style={{ paddingBottom: 8 }}>
         <FilterGroup filters={filters} setFilters={setFilters} />
@@ -61,3 +82,19 @@ const Games = () => {
 export default Games
 
 const styles = StyleSheet.create({})
+=======
+    <>
+      <SafeAreaView edges={["left", "right"]}>
+        <FilterGroup filters={filters} setFilters={setFilters} />
+      </SafeAreaView>
+      <SafeAreaView edges={["left", "right"]}>
+        <FeatureGames games={games} onPressGame={(game) => alert(game.title)} />
+      </SafeAreaView>
+    </>
+  );
+};
+
+export default Games;
+
+const styles = StyleSheet.create({});
+>>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd

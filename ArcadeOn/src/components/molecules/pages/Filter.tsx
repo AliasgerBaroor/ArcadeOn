@@ -1,11 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  Dimensions,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
 import Typography from "../../typography/Typography";
 import { useThemeStore } from "@/src/stores/themeStore";
 import Cross from "../../icons/Cross";

@@ -137,8 +137,4 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: "flex-start",
   },
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd

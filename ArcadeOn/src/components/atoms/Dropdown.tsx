@@ -17,10 +17,7 @@ export interface DropdownProps {
   onClose: () => void;
   top?: number;
   left?: number;
-<<<<<<< HEAD
-=======
   width?: number
->>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -30,10 +27,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   onClose,
   top = 100,
   left = 16,
-<<<<<<< HEAD
-=======
   width
->>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd
 }) => {
   const textHigh = useThemeStore(s => s.colors.textHigh);
   const red = useThemeStore(s => s.colors.error);
@@ -50,13 +44,8 @@ const Dropdown: React.FC<DropdownProps> = ({
             borderRadius: 8,
             elevation: 8,
             zIndex: 9999,
-<<<<<<< HEAD
-            minWidth: screenWidth * 0.4,
-            maxWidth: screenWidth - 32,
-=======
             minWidth: width ?? screenWidth * 0.4,
             maxWidth: width ?? screenWidth - 32,
->>>>>>> 7f535493530cb308795cc864f5ee2e864e3ab4cd
           }}
         >
           {options.map((opt, index) => {

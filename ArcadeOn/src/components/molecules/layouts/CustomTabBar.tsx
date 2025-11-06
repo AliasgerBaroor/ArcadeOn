@@ -29,8 +29,8 @@ export default function CustomTabBar({
   const bgCard = useThemeStore((s) => s.colors.bgCard);
 
   return (
-    <SafeAreaView edges={["bottom", "left", "right"]}>
-      <View style={[styles.row, { backgroundColor: bgCard }]}>
+    <SafeAreaView edges={["bottom", "left", "right"]} style={{backgroundColor:bgCard}}>
+      <View style={[styles.row]}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;

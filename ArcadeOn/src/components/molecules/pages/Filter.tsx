@@ -177,7 +177,7 @@ const handlePress = () => {
                 onClose={() => setDropdownOpen(false)}
                 top={dropdownPos?.top}
                 left={dropdownPos?.left}
-                width={dropdownPos?.width}
+                width={dropdownPos?.width ?? 200}
               />
             </SafeAreaView>
           </View>

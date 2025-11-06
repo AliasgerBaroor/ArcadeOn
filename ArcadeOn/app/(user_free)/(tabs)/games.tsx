@@ -47,7 +47,9 @@ const Games = () => {
       selected: false,
     }))
   );
-
+  
+{/* <View style={{ flex: 1 }}>
+      <View style={{ paddingBottom: 8 }}></View> */}
   return (
     <>
       <SafeAreaView edges={["left", "right"]}>

@@ -1,5 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Typography from "../../typography/Typography";
 import { useThemeStore } from "@/src/stores/themeStore";
 import Cross from "../../icons/Cross";
@@ -55,6 +61,7 @@ const handlePress = () => {
     } else {
       chipRef.current.measureInWindow((x, y, width, height) => {
         const dropdownWidth = width;
+        const dropdownHeightOffset = 36;
         const dropdownHeightOffset = 36;
         const dropdownY = y + height + dropdownHeightOffset;
 
@@ -177,7 +184,7 @@ const handlePress = () => {
                 onClose={() => setDropdownOpen(false)}
                 top={dropdownPos?.top}
                 left={dropdownPos?.left}
-                width={dropdownPos?.width}
+                width={dropdownPos?.width ?? 200}
               />
             </SafeAreaView>
           </View>

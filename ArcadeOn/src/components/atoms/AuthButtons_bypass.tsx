@@ -13,13 +13,11 @@ import Constants from "expo-constants";
 
 const extra = Constants.expoConfig?.extra ?? {};
 
-
 const {
-  GOOGLE_CLIENT_ID,
-  // GOOGLE_IOS_CLIENT_ID,
-  // GOOGLE_EXPO_CLIENT_ID,
+  GOOGLE_ANDROID_CLIENT_ID,
+  GOOGLE_IOS_CLIENT_ID,
+  GOOGLE_EXPO_CLIENT_ID,
 } = extra;
-
 
 const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
   const textHigh = useThemeStore((s) => s.colors.textHigh);
@@ -31,36 +29,37 @@ const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
     type: "error",
   });
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GOOGLE_CLIENT_ID,
-    // androidClientId: GOOGLE_CLIENT_ID,
-    // iosClientId: GOOGLE_IOS_CLIENT_ID,
-    // clientId: GOOGLE_EXPO_CLIENT_ID,
-  });
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+  //   iosClientId: GOOGLE_IOS_CLIENT_ID,
+  //   clientId: GOOGLE_EXPO_CLIENT_ID,
+  // });
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      const { authentication } = response;
-      async function doLogin() {
-        await login("USER_FREE");
-      }
-      doLogin();
-      router.push("/");
-    } else if (response?.type === "error") {
-      setShowToast({
-        state: true,
-        message: "Google Login failed",
-        type: "error",
-      });
-    }
-  }, [response]);
+  // useEffect(() => {
+  //   if (response?.type === "success") {
+  //     const { authentication } = response;
+  //     async function doLogin() {
+  //       await login("USER_FREE");
+  //     }
+  //     doLogin();
+  //     router.push("/");
+  //   } else if (response?.type === "error") {
+  //     setShowToast({
+  //       state: true,
+  //       message: "Google Login failed",
+  //       type: "error",
+  //     });
+  //   }
+  // }, [response]);
 
   const loginWithGoogle = async () => {
-    try {
-      await promptAsync();
-    } catch (error) {
-      setShowToast({ state: true, message: "Auth failed", type: "error" });
-    }
+    // try {
+    //   await promptAsync();
+    // } catch (error) {
+    //   setShowToast({ state: true, message: "Auth failed", type: "error" });
+    // }
+    await login("USER_FREE");
+    router.push("/");
   };
 
   const Button: Record<AuthButtonVariant, ReactNode> = {
@@ -69,7 +68,7 @@ const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
         {...props}
         style={styles.google}
         onPress={loginWithGoogle}
-        disabled={!request}
+        // disabled={!request}
       >
         <View style={styles.buttonRow}>
           <GoogleIcon size={20} />

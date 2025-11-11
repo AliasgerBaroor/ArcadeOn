@@ -1,4 +1,3 @@
-// The solution is paste my this code
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { ReactNode, useState, useEffect } from "react";
 import * as Google from "expo-auth-session/providers/google";
@@ -11,19 +10,16 @@ import GamesIcon from "../icons/Games";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/src/sbc/utils/auth";
 import Constants from "expo-constants";
-import * as Auth from "expo-auth-session"
-import * as WebBrowser from "expo-web-browser";
-WebBrowser.maybeCompleteAuthSession();
 
 const extra = Constants.expoConfig?.extra ?? {};
 
 
 const {
   GOOGLE_CLIENT_ID,
-  GOOGLE_EXPO_CLIENT_ID,
   // GOOGLE_IOS_CLIENT_ID,
+  // GOOGLE_EXPO_CLIENT_ID,
 } = extra;
-const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
+
 
 const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
   const textHigh = useThemeStore((s) => s.colors.textHigh);
@@ -35,11 +31,13 @@ const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
     type: "error",
   });
 
-const [request, response, promptAsync] = Google.useAuthRequest({
-  clientId: GOOGLE_EXPO_CLIENT_ID,
-  // redirectUri: Auth.makeRedirectUri(),
-  redirectUri: EXPO_REDIRECT_URI,
-});
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: GOOGLE_CLIENT_ID,
+    // androidClientId: GOOGLE_CLIENT_ID,
+    // iosClientId: GOOGLE_IOS_CLIENT_ID,
+    // clientId: GOOGLE_EXPO_CLIENT_ID,
+  });
+
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
@@ -64,10 +62,6 @@ const [request, response, promptAsync] = Google.useAuthRequest({
       setShowToast({ state: true, message: "Auth failed", type: "error" });
     }
   };
-
-const loginWithArcade = async () =>{
-  // router.push("/arcade-login")
-}
 
   const Button: Record<AuthButtonVariant, ReactNode> = {
     google: (
@@ -145,7 +139,3 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
 });
-
-function async() {
-  throw new Error("Function not implemented.");
-}

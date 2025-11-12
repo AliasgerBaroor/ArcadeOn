@@ -15,8 +15,8 @@
     "prisma:studio": "npx prisma studio",
     "prisma:aliases": "tsx src/scripts/gen-delegates.ts",
     "prisma:all": "npx prisma generate && tsx src/scripts/gen-delegates.ts",
-    "docker:run": "docker-compose up -d",
-    "docker:kill": "docker-compose down",
+    "docker:run": "docker compose up -d",
+    "docker:kill": "docker compose down",
     "prisma:seed": "tsx src/scripts/seed.ts",
     "prisma:seed:user": "tsx src/scripts/seed.ts user"
   },

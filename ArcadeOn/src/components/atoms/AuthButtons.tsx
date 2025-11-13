@@ -10,16 +10,18 @@ import GamesIcon from "../icons/Games";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/src/sbc/utils/auth";
 import Constants from "expo-constants";
+import * as WebBrowser from "expo-web-browser";
+WebBrowser.maybeCompleteAuthSession();
 
 const extra = Constants.expoConfig?.extra ?? {};
 
 
 const {
   GOOGLE_CLIENT_ID,
+  GOOGLE_EXPO_CLIENT_ID,
   // GOOGLE_IOS_CLIENT_ID,
-  // GOOGLE_EXPO_CLIENT_ID,
 } = extra;
-
+const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
 
 const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
   const textHigh = useThemeStore((s) => s.colors.textHigh);
@@ -31,13 +33,10 @@ const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
     type: "error",
   });
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GOOGLE_CLIENT_ID,
-    // androidClientId: GOOGLE_CLIENT_ID,
-    // iosClientId: GOOGLE_IOS_CLIENT_ID,
-    // clientId: GOOGLE_EXPO_CLIENT_ID,
-  });
-
+const [request, response, promptAsync] = Google.useAuthRequest({
+  clientId: GOOGLE_EXPO_CLIENT_ID,
+  redirectUri: EXPO_REDIRECT_URI, 
+});
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;

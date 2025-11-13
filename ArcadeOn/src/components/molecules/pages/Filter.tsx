@@ -62,7 +62,6 @@ const handlePress = () => {
       chipRef.current.measureInWindow((x, y, width, height) => {
         const dropdownWidth = width;
         const dropdownHeightOffset = 36;
-        const dropdownHeightOffset = 36;
         const dropdownY = y + height + dropdownHeightOffset;
 
         const availableLeft = insets.left + 8;

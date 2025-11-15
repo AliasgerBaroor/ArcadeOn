@@ -20,13 +20,11 @@ const extra = Constants.expoConfig?.extra ?? {};
 
 
 const {
-  GOOGLE_CLIENT_ID,
+
   GOOGLE_CLIENT_ID,
   GOOGLE_EXPO_CLIENT_ID,
   // GOOGLE_IOS_CLIENT_ID,
-  // GOOGLE_IOS_CLIENT_ID,
 } = extra;
-const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
 const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
 
 const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
@@ -70,7 +68,7 @@ const [request, response, promptAsync] = Google.useAuthRequest({
   };
 
 const loginWithArcade = async () =>{
-  // router.push("/arcade-login")
+  router.push("/arcade-login" as any)
 }
 
   const Button: Record<AuthButtonVariant, ReactNode> = {
@@ -79,7 +77,6 @@ const loginWithArcade = async () =>{
         {...props}
         style={styles.google}
         onPress={loginWithGoogle}
-        disabled={!request}
         disabled={!request}
       >
         <View style={styles.buttonRow}>
@@ -117,9 +114,7 @@ const loginWithArcade = async () =>{
       <Pressable
         {...props}
         style={styles.arcadeOn}
-        onPress={() => {
-          /* Arcade login logic */
-        }}
+        onPress={loginWithArcade}
       >
         <View style={styles.buttonRow}>
           <GamesIcon size={20} />

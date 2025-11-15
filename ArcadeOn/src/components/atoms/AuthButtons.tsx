@@ -18,11 +18,15 @@ WebBrowser.maybeCompleteAuthSession();
 const extra = Constants.expoConfig?.extra ?? {};
 
 
+
 const {
+  GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_ID,
   GOOGLE_EXPO_CLIENT_ID,
   // GOOGLE_IOS_CLIENT_ID,
+  // GOOGLE_IOS_CLIENT_ID,
 } = extra;
+const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
 const EXPO_REDIRECT_URI = "https://auth.expo.io/@hiren.sbc/arcadeon";
 
 const AuthButton = ({ variant, style, ...props }: AuthButtonProps) => {
@@ -75,6 +79,7 @@ const loginWithArcade = async () =>{
         {...props}
         style={styles.google}
         onPress={loginWithGoogle}
+        disabled={!request}
         disabled={!request}
       >
         <View style={styles.buttonRow}>

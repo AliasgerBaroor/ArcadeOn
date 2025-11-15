@@ -40,6 +40,40 @@ enum PointsTransactionAction {
   CONSUME_ITEM // Used in-game item for points
 }
 
+enum FriendStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum TeamMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum TeamInviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+enum TeamType {
+  CASUAL
+  RANKED
+  CLAN
+}
+
+enum PartyStatus {
+  OPEN
+  LOCKED
+  IN_MATCH
+  CLOSED
+}
+
+
 model User {
   id         String    @id @default(uuid())
   name       String
@@ -77,6 +111,15 @@ model User {
   redemptions        Redemption[]
   userPasses         UserPass[]
   tier               Tier?               @relation(fields: [tierId], references: [id])
+  sentFriendRequests    FriendRequest[] @relation("FriendRequestRequester")
+  receivedFriendRequests FriendRequest[] @relation("FriendRequestReceiver")
+  blockedUsers          Block[]         @relation("Blocker")
+  blockedBy             Block[]         @relation("Blocked")
+  teams                 TeamMember[]
+  teamInvitesSent       TeamInvite[]    @relation("TeamInviteInviter")
+  teamInvitesReceived   TeamInvite[]    @relation("TeamInviteInvitee")
+  partiesHosted         Party[]         @relation("PartyHost")
+  partyMemberships      PartyMember[]
 }
 
 model Device {
@@ -165,14 +208,142 @@ model Leaderboard {
 }
 
 model Friend {
-  id        String   @id @default(uuid())
+  id        String       @id @default(uuid())
   ownerId   String
   targetId  String
-  status    String // pending, accepted, blocked, etc.
-  createdAt DateTime @default(now())
+  status    FriendStatus 
+  createdAt DateTime     @default(now())
 
   owner  User @relation("FriendsOwner", fields: [ownerId], references: [id])
   target User @relation("FriendsTarget", fields: [targetId], references: [id])
+}
+
+
+model FriendRequest {
+  id         String     @id @default(uuid())
+  requester  User       @relation("FriendRequestRequester", fields: [requesterId], references: [id])
+  requesterId String
+  receiver   User       @relation("FriendRequestReceiver", fields: [receiverId], references: [id])
+  receiverId String
+  status     FriendStatus @default(PENDING) // pending, accepted, rejected, blocked
+  message    String?
+  createdAt  DateTime   @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([requesterId, receiverId])
+  @@index([receiverId, status])
+}
+
+model Block {
+  id        String   @id @default(uuid())
+  blockerId String
+  targetId  String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  blocker User @relation("Blocker", fields: [blockerId], references: [id])
+  target  User @relation("Blocked", fields: [targetId], references: [id])
+
+  @@unique([blockerId, targetId])
+  @@index([targetId])
+}
+
+/// Teams (persistent groups) and invites
+model Team {
+  id           String         @id @default(uuid())
+  name         String
+  tag          String?        // e.g. clan tag or short code
+  description  String?
+  type         TeamType       @default(CASUAL)
+  isOpen       Boolean        @default(false) // join without invite
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  ownerId      String
+  metadata     Json?
+
+  owner        User           @relation(fields: [ownerId], references: [id])
+  members      TeamMember[]
+  invites      TeamInvite[]
+  teamStats    TeamStat?
+}
+
+model TeamMember {
+  id         String         @id @default(uuid())
+  teamId     String
+  userId     String
+  role       TeamMemberRole @default(MEMBER)
+  joinedAt   DateTime       @default(now())
+  status     String         @default("active") // active, left, kicked, banned
+  nickname   String?        // optional display name in team
+  updatedAt DateTime @updatedAt
+
+team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([teamId, userId])
+  @@index([userId])
+}
+
+model TeamInvite {
+  id         String         @id @default(uuid())
+  teamId     String
+  inviterId  String
+  inviteeId  String
+  status     TeamInviteStatus @default(PENDING)
+  message    String?
+  expiresAt  DateTime?
+  createdAt  DateTime       @default(now())
+  updatedAt DateTime @updatedAt
+
+  team    Team @relation(fields: [teamId], references: [id])
+  inviter User @relation("TeamInviteInviter", fields: [inviterId], references: [id])
+  invitee User @relation("TeamInviteInvitee", fields: [inviteeId], references: [id])
+
+  @@unique([teamId, inviteeId])
+  @@index([inviteeId])
+}
+
+model TeamStat {
+  id        String   @id @default(uuid())
+  teamId    String   @unique
+  wins      Int      @default(0)
+  losses    Int      @default(0)
+  draws     Int      @default(0)
+  rating    Float?  
+  metadata  Json?
+  updatedAt DateTime @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id])
+}
+
+model Party {
+  id        String    @id @default(uuid())
+  hostId    String
+  gameId    String?  
+  name      String?
+  maxSize   Int       @default(4)
+  status    PartyStatus @default(OPEN)
+  createdAt DateTime  @default(now())
+  metadata  Json?
+
+host User @relation("PartyHost", fields: [hostId], references: [id])
+
+  members PartyMember[]
+}
+
+model PartyMember {
+  id       String   @id @default(uuid())
+  partyId  String
+  userId   String
+  joinedAt DateTime @default(now())
+  ready    Boolean  @default(false)
+  role     String?  // e.g., squad lead, healer, etc.
+
+  party Party @relation(fields: [partyId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([partyId, userId])
+  @@index([userId])
 }
 
 model Notification {

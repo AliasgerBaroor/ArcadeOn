@@ -8,6 +8,7 @@ import type { LoginBodyTypes } from "../schemas/loginUserSchema.js";
 import { userDB } from "../db/aliases.js";
 import { issueToken } from "../utils/security.js";
 import { verifyPassword } from "../utils/hashing.js";
+import type { AuthParamsTypes } from "../schemas/AuthSchema.js";
 
 export const loginUser = async (c: Context) => {
     const { body } = c.get("validated") as { body: LoginBodyTypes };
@@ -29,3 +30,17 @@ export const loginUser = async (c: Context) => {
 export const addUser = async (c: Context) => {
     
 }
+
+export const fetchUserProfile = async (c: Context) => {
+    const {
+      params: { id },
+    } = c.get("validated") as { params: AuthParamsTypes };
+
+       const user = await userDB.findUnique({
+         where: { id },
+       });
+
+    if (!user) return c.json({ error: "user not found" }, 404);
+
+    return c.json({ profile: user }, 200);
+};
